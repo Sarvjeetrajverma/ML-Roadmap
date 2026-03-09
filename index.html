@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>10-Month Final Year AI/ML Roadmap</title>
+<title>10-Month AI/ML Roadmap</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"/>
 <style>
 :root{
@@ -28,6 +28,24 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .nav-r{display:flex;gap:1.5rem;align-items:center}
 .nav-r a{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
 .nav-r a:hover{color:var(--white)}
+
+/* live time widget */
+.live-time-widget {
+  position: absolute; top: 80px; right: 2rem; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.5rem;
+  text-align: right; z-index: 10; border-left: 3px solid var(--c8);
+  backdrop-filter: blur(10px); background: #070f1fcc;
+  animation: fadeIn 1s ease;
+}
+@media(max-width: 850px) { 
+  .live-time-widget { position: relative; top: 0; right: 0; margin: 6rem auto 0; text-align: center; max-width: 300px; border-left: 1px solid var(--border); border-top: 3px solid var(--c8); } 
+}
+.lt-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 0.4rem; display:flex; align-items:center; justify-content:flex-end; gap:0.4rem;}
+@media(max-width: 850px) { .lt-label { justify-content:center; } }
+.live-dot { width: 8px; height: 8px; background: var(--c6); border-radius: 50%; display: inline-block; animation: pulse 1.5s infinite; }
+.lt-clock { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--white); margin-bottom: 0.3rem;}
+.lt-countdown { font-size: 0.75rem; color: var(--c8); font-weight: bold;}
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); } 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); } }
 
 /* hero */
 .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;position:relative;z-index:1}
@@ -183,9 +201,14 @@ hr.div{border:none;border-top:1px solid var(--border);margin:0}
     <a href="#months-strip">Months</a>
     <a href="#timeline">Timeline</a>
     <a href="#salary">Salary</a>
-    <a href="#cta">Start Now</a>
   </div>
 </nav>
+
+<div class="live-time-widget">
+  <div class="lt-label">SRV's Live Tracker <span class="live-dot"></span></div>
+  <div class="lt-clock" id="liveClock">Loading...</div>
+  <div class="lt-countdown" id="liveCountdown">Target: -- days remaining</div>
+</div>
 
 <button id="adminBtn" onclick="enableAdmin()">Admin Mode</button>
 
@@ -565,9 +588,36 @@ new IntersectionObserver(entries=>{
 // Auto-open first week of first month
 document.getElementById('wk0_0')?.classList.add('open');
 
+// --- LIVE TIME TRACKER LOGIC --- //
+
+function updateLiveTime() {
+  const now = new Date();
+  
+  // Update Clock
+  const timeString = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const dateString = now.toLocaleDateString('en-IN', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+  document.getElementById('liveClock').innerText = `${dateString} • ${timeString}`;
+
+  // Countdown to June 1, 2027
+  const gradDate = new Date('June 1, 2027 00:00:00');
+  const diff = gradDate - now;
+
+  if (diff > 0) {
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    document.getElementById('liveCountdown').innerText = `Target (Jun 2027): ${days} days ${hours} hrs to go`;
+  } else {
+    document.getElementById('liveCountdown').innerText = "Target Reached! 🚀";
+  }
+}
+
+// Run clock every second
+setInterval(updateLiveTime, 1000);
+updateLiveTime();
+
 // --- CLOUD TASK TRACKING LOGIC --- //
 
-const BIN_ID = 'PASTE_YOUR_BIN_ID_HERE'; // <--- PUT YOUR BIN ID HERE
+const BIN_ID = '69af1badae596e708f71e096'; // <--- PUT YOUR BIN ID HERE
 let API_KEY = localStorage.getItem('tracker_api_key') || null;
 let savedTasks = [];
 
