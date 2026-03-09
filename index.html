@@ -617,16 +617,21 @@ updateLiveTime();
 
 // --- CLOUD TASK TRACKING LOGIC --- //
 
-const BIN_ID = '69af1badae596e708f71e096'; // <--- PUT YOUR BIN ID HERE
+// --- CLOUD TASK TRACKING LOGIC --- //
+
+const BIN_ID = '69af252dae596e708f71fc2d'; // <--- PUT YOUR EXACT BIN ID HERE
 let API_KEY = localStorage.getItem('tracker_api_key') || null;
 let savedTasks = [];
 
-// 1. Fetch live data from the cloud for everyone (The "World" view)
+// 1. Fetch live data from the cloud for everyone
 async function loadProgressFromCloud() {
   try {
     const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
       headers: { 'X-Bin-Meta': 'false' }
     });
+    
+    if (!response.ok) throw new Error("Bin is private or ID is wrong.");
+    
     const data = await response.json();
     savedTasks = data.tasks || [];
     
@@ -642,16 +647,16 @@ async function loadProgressFromCloud() {
     // Update progress bars for all months
     MC.forEach((_, i) => updateMonthProgress(i));
   } catch (error) {
-    console.error("Failed to load global progress:", error);
+    console.error("Failed to load global progress. Make sure your JSONBin is set to PUBLIC.", error);
   }
 }
 
-// 2. Secret Admin Mode (Only for you)
+// 2. Secret Admin Mode
 window.enableAdmin = function() {
   if (!API_KEY) {
     API_KEY = prompt("Enter your JSONBin Master API Key to unlock editing:");
     if (!API_KEY) return;
-    localStorage.setItem('tracker_api_key', API_KEY); // Remember you on this device
+    localStorage.setItem('tracker_api_key', API_KEY);
   }
   
   // Unlock all checkboxes
@@ -667,7 +672,7 @@ window.toggleTask = async function(taskId, monthIndex) {
   const cb = document.getElementById(taskId);
   const label = document.getElementById('label_' + taskId);
   
-  // Update local UI
+  // Update local UI immediately for a snappy feel
   if(cb.checked) {
     label.classList.add('completed');
     if (!savedTasks.includes(taskId)) savedTasks.push(taskId);
@@ -678,10 +683,10 @@ window.toggleTask = async function(taskId, monthIndex) {
   
   updateMonthProgress(monthIndex);
 
-  // Push update to the world!
+  // Push update to the cloud
   document.getElementById('adminBtn').innerText = "Syncing... ⏳";
   try {
-    await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+    const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -689,9 +694,22 @@ window.toggleTask = async function(taskId, monthIndex) {
       },
       body: JSON.stringify({ tasks: savedTasks })
     });
+
+    // IF THE API KEY IS WRONG, CATCH IT HERE:
+    if (!response.ok) {
+      if(response.status === 401 || response.status === 403) {
+        localStorage.removeItem('tracker_api_key'); // Wipe the bad key
+        API_KEY = null;
+        alert("❌ Invalid API Key! JSONBin rejected the save. Reloading page...");
+        location.reload(); 
+        return;
+      }
+      throw new Error(`HTTP ${response.status}`);
+    }
+
     document.getElementById('adminBtn').innerText = "Live Sync Active 🌍";
   } catch (err) {
-    alert("Failed to sync to cloud. Check API Key.");
+    alert("Network error: Failed to sync to cloud.");
     document.getElementById('adminBtn').innerText = "Sync Error ⚠️";
   }
 };
@@ -718,6 +736,9 @@ window.updateMonthProgress = function(monthIndex) {
   if(pctEl) pctEl.textContent = `${pct}%`;
   if(fillEl) fillEl.style.width = `${pct}%`;
 };
+
+// Start the app by loading the global state
+loadProgressFromCloud();
 
 // Start the app by loading the global state
 loadProgressFromCloud();
