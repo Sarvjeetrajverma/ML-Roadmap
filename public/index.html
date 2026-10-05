@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>10-Month AI/ML Roadmap</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<script>
+if (window.location.protocol === 'file:') {
+    document.write('<div style="position:fixed;top:0;left:0;width:100%;background:#ef4444;color:white;z-index:99999;padding:20px;text-align:center;font-family:sans-serif;font-size:1rem;box-shadow:0 10px 30px rgba(0,0,0,0.5);"><strong>⚠️ BROWSER SECURITY WARNING:</strong> You have opened this file directly from your computer folder.<br>Because this is now a real full-stack project, you MUST access it via the server to sign in.<br><br>👉 Go to <strong><a href="http://localhost:3000" style="color:#fef08a;">http://localhost:3000</a></strong> in your browser address bar.</div>');
+}
+</script>
+<div id="bg"></div>
+
+<nav>
+  <div class="logo">10-Month <span>AI/ML</span></div>
+  <div class="nav-r">
+    <a href="#months-strip">Plan</a>
+    <a href="#timeline">Timeline</a>
+    <a href="#salary">Salary</a>
+    
+    <div class="theme-slider-wrap">
+      <button id="btn-decrease" aria-label="Decrease Theme">−</button>
+      <input type="range" id="theme-slider" min="0" max="2" value="0" step="1">
+      <button id="btn-increase" aria-label="Increase Theme">+</button>
+      <span id="theme-label-nav">Dark</span>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="live-time-widget">
+    <div class="player-card" id="playerCard">
+      <div class="pc-rank">
+        <span class="lvl-badge">LVL <span id="pl-lvl">1</span></span>
+        <span id="pl-title">CSE Student</span>
+      </div>
+      <div class="pc-xp">
+        <span id="pl-xp">0</span> / <span id="pl-max">1800</span> XP
+      </div>
+      <div class="pc-bar-wrap">
+        <div class="pc-bar-fill" id="pl-bar"></div>
+      </div>
+    </div>
+    <div class="lt-label">SRV's Live Tracker <span class="live-dot"></span></div>
+    <div class="lt-clock" id="liveClock">Loading...</div>
+    <div class="lt-countdown" id="liveCountdown">Target: -- days remaining</div>
+  </div>
+
+  <div class="badge">⚡ Final Year · Month 1 → Month 10 · War Mode</div>
+  <h1>CSE Final Year<br>→ <em>AI/ML Engineer</em><br>in 10 Months</h1>
+  <p class="sub">You're a last year student. You graduate 10 Months. This is the week-by-week, task-by-task plan to go from basics to hired.</p>
+  
+  <div class="stats">
+    <div class="stat"><div class="n">10</div><div class="l">Months</div></div>
+    <div class="stat"><div class="n">40</div><div class="l">Weeks</div></div>
+    <div class="stat"><div class="n">160+</div><div class="l">Daily Tasks</div></div>
+    <div class="stat"><div class="n">20+</div><div class="l">Projects</div></div>
+    <div class="stat"><div class="n">₹8–14L</div><div class="l">Start Salary</div></div>
+  </div>
+  
+  <div class="warn-box">
+    <strong>The honest deal:</strong> 3–4 hours per day, 6 days a week, no skipping months. This is compressed because you have only 10 months. You already have CS fundamentals — we skip theory you know and go straight to what gets you hired.
+  </div>
+  
+  <div class="container">
+    <div class="radar-wrap">
+      <div class="wm-header"><span class="wm-title">🧬 Skill Tree Radar</span></div>
+      <div class="radar-canvas-container"><canvas id="skillRadar"></canvas></div>
+    </div>
+  </div>
+  
+  <div class="death-clock-container" id="deathClock">
+    <div class="dc-header">
+      <span class="dc-title">🔥 VELOCITY TRACKER</span>
+      <span class="dc-status" id="dcStatus">ON TRACK ⚡</span>
+    </div>
+    <div class="dc-bar-group">
+      <div class="dc-label">TIME BURNED <span id="timeBurnPct">0.0%</span></div>
+      <div class="dc-track"><div class="dc-fill time-fill" id="timeFill"></div></div>
+    </div>
+    <div class="dc-bar-group">
+      <div class="dc-label">TASKS COMPLETED <span id="taskVelPct">0.0%</span></div>
+      <div class="dc-track"><div class="dc-fill task-fill" id="taskFill"></div></div>
+    </div>
+  </div>
+</section>
+<section id="interactive-roadmap" style="padding: 2rem 0; position: relative; z-index: 1;">
+  <div class="container">
+    <span class="sec-label">Interactive View</span>
+    <h2 class="sec-title">Roadmap.sh Overview</h2>
+    <p class="sec-desc">A high-level visual map of the tech stack and concepts we are conquering.</p>
+    
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 0.5rem; box-shadow: 0 10px 30px var(--shadow); animation: slideUpFade 0.8s 0.5s ease both;">
+      <div style="border-radius: 12px; overflow: hidden; background: var(--bg); display: flex;">
+        <iframe 
+          src="https://roadmap.sh/r/embed?id=696fcd9372acf1058a73acbb" 
+          width="100%" 
+          height="500px" 
+          frameBorder="0"
+          title="AI/ML Interactive Roadmap">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="months-strip">
+  <div class="container">
+    <span class="sec-label">Complete Month-by-Month Plan</span>
+    <h2 class="sec-title">Click Any Month to Expand</h2>
+    <div class="pills-container"><div class="pills-row" id="pillsRow"></div></div>
+    <div id="cardsContainer"></div>
+  </div>
+</section>
+
+<section id="timeline">
+  <div class="container">
+    <span class="sec-label">What You Ship Each Month</span>
+    <h2 class="sec-title">Month 1 → Month 10</h2>
+    <p class="sec-desc">Every month has one non-negotiable deliverable. These are not suggestions — they are checkpoints.</p>
+    <div class="tl-wrap" id="tlWrap"></div>
+  </div>
+</section>
+
+<section id="salary">
+  <div class="container">
+    <span class="sec-label">Financial Projection</span>
+    <h2 class="sec-title">Salary Growth: Year 1 → Year 8</h2>
+    <p class="sec-desc">India market. Skills from this 10-month plan compound every year.</p>
+    <div class="sal-rows" id="salRows"></div>
+    <p class="salary-note">* Global/remote roles are 2–4x these numbers. Ranges depend on company tier and specialization.</p>
+  </div>
+</section>
+
+<section id="cta">
+  <div class="container">
+    <div class="cta-inner">
+      <h2>Start Today.<br>Not This Weekend.</h2>
+      <p>You have 10 months. Every week you delay is a week your classmates spend building. The engineers who stand out at placement in 10 Months are the ones who started in April 2026.</p>
+      <div class="start-steps">
+        <div class="step"><div class="step-n">TODAY</div><div class="step-t">Install Python 3.12 + VS Code + Git. Create GitHub account. Make your first commit right now.</div></div>
+        <div class="step"><div class="step-n">WEEK 1</div><div class="step-t">Complete Python OOP in 2 days. Watch 3Blue1Brown Linear Algebra. Solve 5 LeetCode Easy.</div></div>
+        <div class="step"><div class="step-n">MONTH 1</div><div class="step-t">Working EDA notebook on GitHub. Gradient descent from scratch in NumPy. Daily commits.</div></div>
+        <div class="step"><div class="step-n">MONTH 10</div><div class="step-t">Signed offer letter in hand. Capstone project live. 10 months well spent.</div></div>
+      </div>
+      <p class="cta-note">10 months. One direction. Your call starts now.</p>
+    </div>
+  </div>
+</section>
+
+<button id="adminBtn" onclick="enableAdmin()">Sign In to Track</button>
+
+<div id="tracker">
+  <div class="tr-label">Progress</div>
+  <div class="tr-dots" id="trDots"></div>
+</div>
+
+<div class="pomodoro-widget" id="pomoWidget">
+  <button id="pomoToggleIcon" class="pomo-toggle-btn">⏰</button>
+  <div class="pomo-content" id="pomoContent">
+    <div class="pomo-header" id="pomoHeader">
+      <span class="pomo-title">⏱️ Deep Work</span>
+      <div class="pomo-hdr-right">
+        <span class="pomo-drag">⠿</span>
+        <span class="pomo-close" id="pomoClose">✖</span>
+      </div>
+    </div>
+    <div class="pomo-display" id="pomoTime">50:00</div>
+    <div class="pomo-controls">
+      <button id="pomoStart">Start</button>
+      <button id="pomoMode">Break</button>
+      <button id="pomoReset">↻</button>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
